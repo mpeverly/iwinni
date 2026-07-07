@@ -9,103 +9,198 @@ import FormattedDate from '../../components/FormattedDate.astro';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const categoryMap: Record<string, { label: string; cls: string }> = {
+	'first-post':          { label: 'Global Travel',    cls: 'badge-travel' },
+	'second-post':         { label: 'High-Altitude',    cls: 'badge-altitude' },
+	'third-post':          { label: 'Outdoor Adventure',cls: 'badge-adventure' },
+	'markdown-style-guide':{ label: 'Global Travel',    cls: 'badge-travel' },
+	'using-mdx':           { label: 'Outdoor Adventure',cls: 'badge-adventure' },
+};
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead title="Stories" description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+		<main class="stories-main">
+
+			<div class="stories-hero">
+				<span class="section-label">Dispatches</span>
+				<h1>Stories</h1>
+				<p>Deeply researched briefs from the world's most iconic regions.</p>
+			</div>
+
+			<ul class="post-list" role="list">
+				{posts.map((post, i) => {
+					const cat = categoryMap[post.id] ?? { label: 'Adventure', cls: 'badge-adventure' };
+					return (
+						<li class:list={['post-item', i === 0 ? 'post-item--featured' : '']}>
+							<a href={`/blog/${post.id}/`} class="post-link">
+								<div class="post-img-wrap">
+									{post.data.heroImage && (
+										<img
+											src={post.data.heroImage}
+											alt={post.data.title}
+											loading={i === 0 ? 'eager' : 'lazy'}
+										/>
+									)}
+								</div>
+								<div class="post-content">
+									<div class="post-meta">
+										<span class={`badge ${cat.cls}`}>{cat.label}</span>
+										<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+									</div>
+									<h2 class="post-title">{post.data.title}</h2>
+									<p class="post-desc">{post.data.description}</p>
+									<span class="post-cta">Read Brief →</span>
+								</div>
+							</a>
+						</li>
+					);
+				})}
+			</ul>
+
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<style>
+	.stories-main {
+		max-width: var(--max-width);
+		margin: 0 auto;
+		padding: 3rem 2rem 5rem;
+	}
+
+	/* Page header */
+	.stories-hero {
+		margin-bottom: 3rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--color-cream-dark);
+	}
+	.section-label {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--color-green);
+		margin-bottom: 0.6rem;
+	}
+	.stories-hero h1 {
+		margin: 0 0 0.5rem;
+		font-size: clamp(2rem, 5vw, 3rem);
+	}
+	.stories-hero p {
+		color: var(--color-muted);
+		font-size: 1.05rem;
+		margin: 0;
+	}
+
+	/* Post list */
+	.post-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.post-item {
+		border-bottom: 1px solid var(--color-cream-dark);
+	}
+	.post-link {
+		display: grid;
+		grid-template-columns: 280px 1fr;
+		gap: 2rem;
+		padding: 2rem 0;
+		text-decoration: none;
+		color: inherit;
+		transition: opacity 0.2s;
+	}
+	.post-link:hover { opacity: 0.85; }
+	.post-link:hover .post-title { color: var(--color-green); }
+
+	/* Featured (first) post */
+	.post-item--featured .post-link {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+	.post-item--featured .post-img-wrap {
+		aspect-ratio: 21/9;
+		border-radius: 12px;
+	}
+	.post-item--featured .post-title {
+		font-size: clamp(1.4rem, 3vw, 2rem);
+	}
+
+	.post-img-wrap {
+		aspect-ratio: 16/9;
+		overflow: hidden;
+		border-radius: 10px;
+		flex-shrink: 0;
+		background: var(--color-cream-dark);
+	}
+	.post-img-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0;
+		transition: transform 0.3s ease;
+	}
+	.post-link:hover .post-img-wrap img { transform: scale(1.04); }
+
+	.post-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.5rem;
+	}
+	.post-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+	.post-date {
+		font-family: var(--font-display);
+		font-size: 0.78rem;
+		color: var(--color-muted);
+		font-weight: 500;
+	}
+	.post-title {
+		font-size: 1.3rem;
+		margin: 0;
+		line-height: 1.25;
+		color: var(--color-charcoal);
+		transition: color 0.2s;
+	}
+	.post-desc {
+		font-size: 0.9rem;
+		color: var(--color-muted);
+		margin: 0;
+		line-height: 1.55;
+	}
+	.post-cta {
+		font-family: var(--font-display);
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: var(--color-green);
+		margin-top: 0.25rem;
+	}
+
+	@media (max-width: 720px) {
+		.stories-main { padding: 2rem 1.25rem 4rem; }
+		.post-link {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+		.post-img-wrap { aspect-ratio: 16/9; }
+	}
+</style>

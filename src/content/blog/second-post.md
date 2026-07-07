@@ -1,16 +1,45 @@
 ---
-title: "Second post"
-description: "Lorem ipsum dolor sit amet"
-pubDate: "Jul 15 2022"
-heroImage: "/blog-placeholder-4.jpg"
+title: "Himalayan Expedition Dispatch: The Khumbu Season in Review"
+description: "A comprehensive debrief on the 2026 Everest and Lhotse climbing season — permit numbers, weather patterns, high camp conditions, and what it means for future expeditions."
+pubDate: "Jun 15 2026"
+heroImage: "/hero-himalaya.jpg"
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+The spring 2026 climbing season in the Khumbu region has concluded, and the numbers and narratives it leaves behind deserve careful analysis. For the broader expedition community — those planning future objectives, studying Himalayan trends, or simply following the world's highest theater — this debrief covers the key operational and environmental signals.
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+## Season Overview
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+The Nepal Department of Tourism issued 463 Everest summit permits this spring, continuing a decade-long upward trend. Total summiteers numbered 312, with a summit success rate of approximately 67% — slightly below the five-year average of 71%, attributed primarily to a compressed summit window driven by an early monsoon onset.
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+Lhotse saw 78 permitted climbers with a 74% success rate, consistent with recent seasons. Makalu — the fifth-highest peak globally — had an exceptional season, with 34 of 41 permitted climbers reaching the summit, aided by stable conditions during the third week of May.
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+## Weather Analysis
+
+The critical summit window between mid-May and early June was notably narrow in 2026. A low-pressure system over the Bay of Bengal accelerated the monsoon's northern advance by approximately eight days relative to the 30-year median. Teams that had positioned themselves at high camps by May 15th achieved the majority of summits. Those delayed by rotation schedules or acclimatization holds found the window had closed before they could capitalize.
+
+The Jet Stream's behavior this season provided three clear windows rather than the typical two, but each window was 24–36 hours shorter than historical norms. Weather forecasting services — particularly Meteotest and the IFMGA-affiliated services — received significant praise from team leaders for accuracy in calling the May 17th and May 22nd windows.
+
+## High Camp Conditions
+
+The South Col (7,906m) continues to be a focus of environmental management discussion. The Sagarmatha Pollution Control Committee expanded its helicopter waste extraction program this season, removing approximately 4.2 metric tons of accumulated material from camps III and IV — the largest single-season extraction effort to date.
+
+Ice conditions on the Lhotse Face were unusually firm through mid-season due to below-average spring snowfall. Fixed-line operators — led this season by Seven Summit Treks and Asian Trekking — reported 14-gauge rope throughout the technical sections, with anchor systems rated for the expected loads.
+
+## Permit & Access Intelligence
+
+The Government of Nepal has confirmed that the permit fee structure will remain unchanged for the 2027 spring season: $11,000 USD for Everest (per climber). Discussions around a tiered fee structure based on route and team size continue at the Ministry level but have not reached resolution.
+
+Helicopter evacuation response times from Khumbu to Kathmandu averaged 47 minutes this season, with all serious AMS and frostbite cases receiving hospital-level care within 90 minutes of distress calls — a meaningful improvement over 2024.
+
+## Looking Ahead: 2027 Considerations
+
+Several factors will shape 2027 expedition planning:
+
+1. **Climate trend**: The acceleration in monsoon onset appears to be a durable pattern, not an anomaly. Teams should plan summit-window positioning for May 15th readiness.
+2. **Permits**: Apply through the liaison officer system no later than October 2026 for spring berths.
+3. **Icefall conditions**: The Khumbu Icefall Doctor team has flagged three new crevasse zones requiring fresh routing in the lower section.
+4. **New route activity**: A Polish team is planning a winter attempt on a new line on the West Ridge — one of the few remaining significant unclimbed features on Everest.
+
+---
+
+*Data sourced from Nepal Department of Tourism official season reports, Himalayan Database, and post-expedition team debriefs.*
