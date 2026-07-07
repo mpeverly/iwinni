@@ -26,7 +26,23 @@ if (!article) {
 
 // Convert D1 database format to BlogPost expected properties
 const pubDate = article.date ? new Date(article.date) : new Date();
-const heroImage = article.hero_image || '/hero-patagonia.jpg';
+
+// Extract image URL from main_story
+const imgMatch = article.main_story ? article.main_story.match(/!\[.*?\]\((.*?)\)/) : null;
+const heroImage = imgMatch ? imgMatch[1] : '/hero-patagonia.jpg';
+
+// Strip image and split into paragraphs
+const textOnly = article.main_story ? article.main_story.replace(/!\[.*?\]\(.*?\)/, '').trim() : '';
+
+// Helper to convert basic markdown links and bold text to HTML
+function formatMarkdown(text) {
+	if (!text) return '';
+	return text
+		.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+		.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+const paragraphs = textOnly.split(/\n\s*\n/).filter(Boolean).map(formatMarkdown);
 ---
 
 <BlogPost
@@ -36,14 +52,20 @@ const heroImage = article.hero_image || '/hero-patagonia.jpg';
 	heroImage={heroImage}
 >
 	<div class="prose">
-		<p>{article.main_story}</p>
+		{paragraphs.map((html) => <p set:html={html} />)}
 		
 		{article.feel_good && (
 			<>
 				<hr />
 				<h3>The Last Chair</h3>
-				<p>{article.feel_good}</p>
+				<p set:html={formatMarkdown(article.feel_good)} />
 			</>
+		)}
+
+		{article.sources && (
+			<div class="sources-box" style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--color-cream-dark); font-size: 0.85rem; color: var(--color-muted);">
+				<strong>Sources:</strong> {article.sources}
+			</div>
 		)}
 	</div>
 </BlogPost>

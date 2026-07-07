@@ -6,45 +6,31 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import FormattedDate from '../components/FormattedDate.astro';
 
 let posts = [];
-let debugInfo = {
-	hasRuntime: false,
-	runtimeKeys: [],
-	hasEnv: false,
-	envKeys: [],
-	error: null,
-	postsFetched: 0
-};
-
 try {
-	if (Astro.locals && Astro.locals.runtime) {
-		debugInfo.hasRuntime = true;
-		debugInfo.runtimeKeys = Object.keys(Astro.locals.runtime);
-		if (Astro.locals.runtime.env) {
-			debugInfo.hasEnv = true;
-			debugInfo.envKeys = Object.keys(Astro.locals.runtime.env);
-			
-			const env = Astro.locals.runtime.env;
-			const DB = env.DB || env.iwinni_blog;
-			if (DB) {
-				const { results } = await DB.prepare(
-					"PRAGMA table_info(articles)"
-				).all();
-				debugInfo.tableColumns = results;
-				
-				// Let's run a SELECT * to see the first row structure too
-				const firstRow = await DB.prepare("SELECT * FROM articles LIMIT 1").first();
-				debugInfo.firstRow = firstRow;
-			} else {
-				debugInfo.error = "No database binding found (checked env.DB and env.iwinni_blog)";
-			}
-		} else {
-			debugInfo.error = "Astro.locals.runtime.env is missing";
-		}
-	} else {
-		debugInfo.error = "Astro.locals.runtime is missing";
+	const env = Astro.locals.runtime.env;
+	const DB = env.DB || env.iwinni_blog;
+	if (DB) {
+		const { results } = await DB.prepare(
+			"SELECT title, slug, date, category, main_story, feel_good, sources FROM articles ORDER BY date DESC LIMIT 3"
+		).all();
+		posts = results || [];
 	}
-} catch (e: any) {
-	debugInfo.error = e.message || String(e);
+} catch (e) {
+	console.error("Failed to query D1 database for homepage latest articles:", e);
+}
+
+function parseMainStory(mainStory) {
+	if (!mainStory) {
+		return { heroImage: '/hero-patagonia.jpg', summary: '' };
+	}
+	const imgMatch = mainStory.match(/!\[.*?\]\((.*?)\)/);
+	const heroImage = imgMatch ? imgMatch[1] : '/hero-patagonia.jpg';
+	
+	const textOnly = mainStory.replace(/!\[.*?\]\(.*?\)/, '').trim();
+	const paragraphs = textOnly.split(/\n\s*\n/);
+	const summary = paragraphs[0] || '';
+	
+	return { heroImage, summary };
 }
 
 const categories = [
@@ -135,7 +121,7 @@ const categories = [
 					<ul class="post-grid" role="list">
 						{posts.map((post) => {
 							const pubDate = post.date ? new Date(post.date) : new Date();
-							const heroImage = post.hero_image || '/hero-patagonia.jpg';
+							const { heroImage, summary } = parseMainStory(post.main_story);
 							return (
 								<li class="post-card">
 									<a href={`/blog/${post.slug}/`} class="post-card-link">
@@ -152,7 +138,7 @@ const categories = [
 												<FormattedDate date={pubDate} />
 											</p>
 											<h3 class="post-card-title">{post.title}</h3>
-											<p class="post-card-desc">{post.summary}</p>
+											<p class="post-card-desc">{summary}</p>
 											<span class="post-card-cta">Read Brief →</span>
 										</div>
 									</a>
@@ -178,12 +164,6 @@ const categories = [
 				</a>
 			</div>
 		</section>
-
-		<!-- Debug Console for D1 -->
-		<div style="background: #fee2e2; color: #991b1b; padding: 1.5rem; margin: 2rem auto; max-width: var(--max-width); border-radius: 8px; font-family: monospace; font-size: 0.85rem; border: 1px solid #fecaca;">
-			<h3 style="margin-top: 0; color: #991b1b;">🔧 D1 Connection Debugger</h3>
-			<pre style="background: rgba(255,255,255,0.7); color: #1c1f1a; padding: 1rem; border-radius: 6px; overflow-x: auto; margin-bottom: 0;">{JSON.stringify(debugInfo, null, 2)}</pre>
-		</div>
 
 		<Footer />
 	</body>
