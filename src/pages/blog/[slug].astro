@@ -1,0 +1,48 @@
+---
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	return Astro.redirect('/404');
+}
+
+let article = null;
+try {
+	const { DB } = Astro.locals.runtime.env;
+	if (DB) {
+		article = await DB.prepare(
+			"SELECT * FROM articles WHERE slug = ?"
+		).bind(slug).first();
+	}
+} catch (e) {
+	console.error("Failed to query D1 database:", e);
+}
+
+if (!article) {
+	return Astro.redirect('/404');
+}
+
+// Convert D1 database format to BlogPost expected properties
+const pubDate = article.date ? new Date(article.date) : new Date();
+const heroImage = article.hero_image || '/hero-patagonia.jpg';
+---
+
+<BlogPost
+	title={article.title}
+	description={article.summary || article.title}
+	pubDate={pubDate}
+	heroImage={heroImage}
+>
+	<div class="prose">
+		<p>{article.main_story}</p>
+		
+		{article.feel_good && (
+			<>
+				<hr />
+				<h3>The Last Chair</h3>
+				<p>{article.feel_good}</p>
+			</>
+		)}
+	</div>
+</BlogPost>

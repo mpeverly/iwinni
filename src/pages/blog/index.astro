@@ -2,21 +2,34 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION } from '../../consts';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+let articles = [];
+try {
+	const { DB } = Astro.locals.runtime.env;
+	if (DB) {
+		const { results } = await DB.prepare(
+			"SELECT title, slug, date, category, summary, hero_image FROM articles ORDER BY date DESC"
+		).all();
+		articles = results || [];
+	}
+} catch (e) {
+	console.error("Failed to query D1 database for stories list:", e);
+}
 
-const categoryMap: Record<string, { label: string; cls: string }> = {
-	'first-post':          { label: 'Global Travel',    cls: 'badge-travel' },
-	'second-post':         { label: 'High-Altitude',    cls: 'badge-altitude' },
-	'third-post':          { label: 'Outdoor Adventure',cls: 'badge-adventure' },
-	'markdown-style-guide':{ label: 'Global Travel',    cls: 'badge-travel' },
-	'using-mdx':           { label: 'Outdoor Adventure',cls: 'badge-adventure' },
+// Inline fallback mapping for styling badges
+const categoryBadgeMap: Record<string, string> = {
+	'global travel': 'badge-travel',
+	'outdoor adventure': 'badge-adventure',
+	'high-altitude exploration': 'badge-altitude',
+	'high-altitude': 'badge-altitude'
 };
+
+function getBadgeClass(cat: string) {
+	const normalized = (cat || '').toLowerCase().trim();
+	return categoryBadgeMap[normalized] ?? 'badge-adventure';
+}
 ---
 
 <!doctype html>
@@ -34,35 +47,41 @@ const categoryMap: Record<string, { label: string; cls: string }> = {
 				<p>Deeply researched briefs from the world's most iconic regions.</p>
 			</div>
 
-			<ul class="post-list" role="list">
-				{posts.map((post, i) => {
-					const cat = categoryMap[post.id] ?? { label: 'Adventure', cls: 'badge-adventure' };
-					return (
-						<li class:list={['post-item', i === 0 ? 'post-item--featured' : '']}>
-							<a href={`/blog/${post.id}/`} class="post-link">
-								<div class="post-img-wrap">
-									{post.data.heroImage && (
+			{articles.length === 0 ? (
+				<div class="empty-state">
+					<p>No stories published yet. Stay tuned as we build our trail log.</p>
+				</div>
+			) : (
+				<ul class="post-list" role="list">
+					{articles.map((article, i) => {
+						const badgeClass = getBadgeClass(article.category);
+						const pubDate = article.date ? new Date(article.date) : new Date();
+						const heroImage = article.hero_image || '/hero-patagonia.jpg';
+						return (
+							<li class:list={['post-item', i === 0 ? 'post-item--featured' : '']}>
+								<a href={`/blog/${article.slug}/`} class="post-link">
+									<div class="post-img-wrap">
 										<img
-											src={post.data.heroImage}
-											alt={post.data.title}
+											src={heroImage}
+											alt={article.title}
 											loading={i === 0 ? 'eager' : 'lazy'}
 										/>
-									)}
-								</div>
-								<div class="post-content">
-									<div class="post-meta">
-										<span class={`badge ${cat.cls}`}>{cat.label}</span>
-										<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
 									</div>
-									<h2 class="post-title">{post.data.title}</h2>
-									<p class="post-desc">{post.data.description}</p>
-									<span class="post-cta">Read Brief →</span>
-								</div>
-							</a>
-						</li>
-					);
-				})}
-			</ul>
+									<div class="post-content">
+										<div class="post-meta">
+											<span class={`badge ${badgeClass}`}>{article.category || 'Adventure'}</span>
+											<span class="post-date"><FormattedDate date={pubDate} /></span>
+										</div>
+										<h2 class="post-title">{article.title}</h2>
+										<p class="post-desc">{article.summary}</p>
+										<span class="post-cta">Read Brief →</span>
+									</div>
+								</a>
+							</li>
+						);
+					})}
+				</ul>
+			)}
 
 		</main>
 		<Footer />
@@ -100,6 +119,16 @@ const categoryMap: Record<string, { label: string; cls: string }> = {
 		color: var(--color-muted);
 		font-size: 1.05rem;
 		margin: 0;
+	}
+
+	/* Empty state */
+	.empty-state {
+		text-align: center;
+		padding: 4rem 1.5rem;
+		background: var(--color-cream-dark);
+		border-radius: 12px;
+		color: var(--color-muted);
+		font-family: var(--font-body);
 	}
 
 	/* Post list */
