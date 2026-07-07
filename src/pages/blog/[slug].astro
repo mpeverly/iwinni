@@ -9,7 +9,8 @@ if (!slug) {
 
 let article = null;
 try {
-	const { DB } = Astro.locals.runtime.env;
+	const env = Astro.locals.runtime.env;
+	const DB = env.DB || env.iwinni_blog;
 	if (DB) {
 		article = await DB.prepare(
 			"SELECT * FROM articles WHERE slug = ?"

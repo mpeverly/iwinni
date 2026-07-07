@@ -7,7 +7,8 @@ import FormattedDate from '../components/FormattedDate.astro';
 
 let posts = [];
 try {
-	const { DB } = Astro.locals.runtime.env;
+	const env = Astro.locals.runtime.env;
+	const DB = env.DB || env.iwinni_blog;
 	if (DB) {
 		const { results } = await DB.prepare(
 			"SELECT title, slug, date, category, summary, hero_image FROM articles ORDER BY date DESC LIMIT 3"
