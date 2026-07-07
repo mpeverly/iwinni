@@ -27,10 +27,13 @@ try {
 			const DB = env.DB || env.iwinni_blog;
 			if (DB) {
 				const { results } = await DB.prepare(
-					"SELECT title, slug, date, category, summary, hero_image FROM articles ORDER BY date DESC LIMIT 3"
+					"PRAGMA table_info(articles)"
 				).all();
-				posts = results || [];
-				debugInfo.postsFetched = posts.length;
+				debugInfo.tableColumns = results;
+				
+				// Let's run a SELECT * to see the first row structure too
+				const firstRow = await DB.prepare("SELECT * FROM articles LIMIT 1").first();
+				debugInfo.firstRow = firstRow;
 			} else {
 				debugInfo.error = "No database binding found (checked env.DB and env.iwinni_blog)";
 			}
