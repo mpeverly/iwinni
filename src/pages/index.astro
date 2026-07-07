@@ -6,17 +6,42 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import FormattedDate from '../components/FormattedDate.astro';
 
 let posts = [];
+let debugInfo = {
+	hasRuntime: false,
+	runtimeKeys: [],
+	hasEnv: false,
+	envKeys: [],
+	error: null,
+	postsFetched: 0
+};
+
 try {
-	const env = Astro.locals.runtime.env;
-	const DB = env.DB || env.iwinni_blog;
-	if (DB) {
-		const { results } = await DB.prepare(
-			"SELECT title, slug, date, category, summary, hero_image FROM articles ORDER BY date DESC LIMIT 3"
-		).all();
-		posts = results || [];
+	if (Astro.locals && Astro.locals.runtime) {
+		debugInfo.hasRuntime = true;
+		debugInfo.runtimeKeys = Object.keys(Astro.locals.runtime);
+		if (Astro.locals.runtime.env) {
+			debugInfo.hasEnv = true;
+			debugInfo.envKeys = Object.keys(Astro.locals.runtime.env);
+			
+			const env = Astro.locals.runtime.env;
+			const DB = env.DB || env.iwinni_blog;
+			if (DB) {
+				const { results } = await DB.prepare(
+					"SELECT title, slug, date, category, summary, hero_image FROM articles ORDER BY date DESC LIMIT 3"
+				).all();
+				posts = results || [];
+				debugInfo.postsFetched = posts.length;
+			} else {
+				debugInfo.error = "No database binding found (checked env.DB and env.iwinni_blog)";
+			}
+		} else {
+			debugInfo.error = "Astro.locals.runtime.env is missing";
+		}
+	} else {
+		debugInfo.error = "Astro.locals.runtime is missing";
 	}
-} catch (e) {
-	console.error("Failed to query D1 database for homepage latest articles:", e);
+} catch (e: any) {
+	debugInfo.error = e.message || String(e);
 }
 
 const categories = [
@@ -150,6 +175,12 @@ const categories = [
 				</a>
 			</div>
 		</section>
+
+		<!-- Debug Console for D1 -->
+		<div style="background: #fee2e2; color: #991b1b; padding: 1.5rem; margin: 2rem auto; max-width: var(--max-width); border-radius: 8px; font-family: monospace; font-size: 0.85rem; border: 1px solid #fecaca;">
+			<h3 style="margin-top: 0; color: #991b1b;">🔧 D1 Connection Debugger</h3>
+			<pre style="background: rgba(255,255,255,0.7); color: #1c1f1a; padding: 1rem; border-radius: 6px; overflow-x: auto; margin-bottom: 0;">{JSON.stringify(debugInfo, null, 2)}</pre>
+		</div>
 
 		<Footer />
 	</body>
